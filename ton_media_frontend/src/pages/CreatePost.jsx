@@ -5,13 +5,14 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { CKEDITOR_CONFIG } from "../components/admin/CKEditorConfig";
 import { ClassicEditor } from "ckeditor5";
 import 'ckeditor5/ckeditor5.css';
-import ArticleEditor from "../components/home/editor/ArticleEditor";
+import { ArticleEditor } from "../components/admin/editor/ArticleEditor";
+import { ChevronRight, Home } from "lucide-react";
 
 export default function CreatePost() {
 
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState(CATEGORIES[0]);
-    const [content, setContent] = useState();
+    const articleEditorRef = useRef();
     const [thumbnail, setThumbnail] = useState(null);
     const [key, setKey] = useState('');
 
@@ -32,7 +33,7 @@ export default function CreatePost() {
             const form = new FormData();
             form.append('title', title);
             form.append('thumbnail', thumbnail);
-            form.append('content', content);
+            form.append('content', articleEditorRef.current.toJsonString());
             const res = await axios.post(`${BACKEND_URL}/posts/create`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
@@ -53,49 +54,20 @@ export default function CreatePost() {
 
     return (
         <>
-            <div className="flex justify-between gap-10">
-                <div className="w-4/5">
-                    <div className="flex items-center justify-between">
-                        <label htmlFor="title" className="block text-sm/6 font-medium text-gray-900">
-                            Title
-                        </label>
-                    </div>
-                    <div className="mt-2">
-                        <input
-                            id="title"
-                            name="title"
-                            value={title}
-                            type="text"
-                            required
-                            autoComplete="current-username"
-                            className="rounded-md text-lg border border-gray-300 p-2 w-full"
-                            onChange={(e) => { setTitle(e.target.value); }}
-                        />
-                    </div>
-                    <ArticleEditor />
-                </div>
-                <div className="sticky top-0 w-1/5">
-                    <div className="my-2">
-                        <div>
-                        { key && (
-                            <div className="w-full p-4">
-                                <div className="bg-green-200 p-3 text-center w-full">
-                                    Tạo thành công! <a href={`/posts/${key}`}>Xem post ở đây!</a>
-                                </div>
-                            </div>) 
-                        }
-                        </div>
-                        <div className="flex justify-center">
-                            <button onClick={submitPost} className="rounded bg-black text-white text-center py-2 px-4">Submit</button>
-                        </div>
-                    </div>
-                    <div className="my-2">
-                        <div className="flex items-center justify-between">
-                            <label htmlFor="category" className="block text-sm/6 font-medium text-gray-900">
-                                Category
-                            </label>
-                        </div>
-                        <div className="mt-2">
+            <div className="flex justify-center">
+                <button onClick={submitPost} className="rounded bg-black text-white text-center py-2 px-4">Submit</button>
+            </div>
+            <nav className="flex">
+                <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                    <li className="inline-flex items-center">
+                        <a href="/home" className="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                            <Home size={16} className="mr-1" />
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <div className="flex items-center">
+                            <ChevronRight size={16} className="mr-1" />
                             <select 
                                 name="category" 
                                 id="category"
@@ -108,31 +80,36 @@ export default function CreatePost() {
                                 ))}
                             </select>
                         </div>
-                    </div>
-                    <div className="my-2">
-                        <div className="flex items-center justify-between">
-                            <label htmlFor="thumbnail" className="block text-sm/6 font-medium text-gray-900">
-                                Thumbnail
-                            </label>
-                        </div>
-                        <div className="mt-2">
-                            <input 
-                                name="thumbnail" 
-                                id="thumbnail"
-                                required
-                                onChange={onSelectImage}
-                                className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
-                                type="file"
-                            />
-                        </div>
-                    </div>
-                    { thumbnail && (
-                        <div className="w-full my-2">
-                            <div className="italic text-sm">Preview:</div>
-                            <img src={URL.createObjectURL(thumbnail)} className="w-full" />
-                        </div>
-                    ) }
+                    </li>
+                </ol>
+            </nav>
+            <div className="w-full">
+                <div className="mt-2">
+                    <input
+                        id="title"
+                        name="title"
+                        placeholder="Title"
+                        value={title}
+                        type="text"
+                        required
+                        autoComplete="current-username"
+                        className="text-5xl font-bold tracking-tight text-gray-900 w-full"
+                        onChange={(e) => { setTitle(e.target.value); }}
+                    />
                 </div>
+                <div className="mt-2">
+                    <input 
+                        name="thumbnail" 
+                        id="thumbnail"
+                        required
+                        accept="image/*"
+                        onChange={onSelectImage}
+                        className="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm/6"
+                        type="file"
+                    />
+                </div>
+                <img src={thumbnail ? URL.createObjectURL(thumbnail) : "/images/no_image_thumbnail.webp"} alt={""} className="w-full" />
+                <ArticleEditor ref={articleEditorRef} />
             </div>
         </>
     );

@@ -15,6 +15,9 @@ const storageImage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         if (file) {
+            console.log(file.originalname)
+            console.log(file.filename)
+            console.log(path.parse(file.originalname).name)
             cb(null, path.parse(file.originalname).name + Date.now() + path.extname(file.originalname));
         }
     },
@@ -27,6 +30,9 @@ const storageVideo = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         if (file) {
+            console.log(file.originalname)
+            console.log(file.filename)
+            console.log(path.parse(file.originalname).name)
             cb(null, path.parse(file.originalname).name + Date.now() + path.extname(file.originalname));
         }
     },
@@ -37,7 +43,12 @@ const uploadVideo = multer({ storage: storageVideo });
 const unlinkAsync = promisify(fs.unlink) 
 
 router.post('/files/images/upload', authenticateToken, uploadImage.single('file'), async (req, res) => {
-    console.log("Uploading file...");
+    console.log(`Uploading file ${req.file.filename}...`);
+    res.send({ message: "Uploaded successfully!" });
+});
+
+router.post('/files/videos/upload', authenticateToken, uploadVideo.single('file'), async (req, res) => {
+    console.log(`Uploading file ${req.file.filename}...`);
     res.send({ message: "Uploaded successfully!" });
 });
 

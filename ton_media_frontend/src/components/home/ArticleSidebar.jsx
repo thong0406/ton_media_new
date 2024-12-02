@@ -16,9 +16,7 @@ export default function ArticleSidebar(props) {
 
     const fetchData = async () => {
         try {
-            console.log(category);
             const query = `${BACKEND_URL}/posts/all${!category ? "" : `/${category}`}?count=${count}`;
-            console.log(query);
             const res = await axios.get(query);
             setPosts(res.data.map((post) => (<ArticleCardOverlay key={post.Key} post={post} />)));
         }

@@ -13,24 +13,13 @@ const storage = multer.diskStorage({
         if (file) {
             const filename = file.originalname;
             const ext = filename.substring(filename.length - filename.lastIndexOf(".") + 1);
-            if (['jpg', 'png', 'webp'].includes(ext)) {
-                cb(null, "./public/images");
-            }
-            else if (['avi', 'mp4'].includes(ext)) {
-                cb(null, './public/videos');
-            }
-            else {
-                cb(new Error("Error!"));
-            }
+            cb(null, "./public/images");
         }
     },
     filename: (req, file, cb) => {
         if (file) {
             const filename = file.originalname;
             const ext = filename.substring(filename.length - filename.lastIndexOf(".") + 1);
-            if (!['jpg', 'png', 'webp', 'avi', 'mp4'].includes(ext)) {
-                cb(new Error("Please use a .png, .jpg. or .webp file"));
-            }
             cb(null, path.parse(file.originalname).name + Date.now() + path.extname(file.originalname));
         }
     },
@@ -107,6 +96,32 @@ router.post('/posts/create', authenticateToken, upload.single('thumbnail'), asyn
 });
 
 router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'), async (req, res) => {
+    const key = req.params.key;
+    console.log(`Updating post "${key}" ...`);
+    try {
+        const {
+            title, 
+            content,
+            category,
+        } = req.body;
+        const post = Post.findOne({ Key: key });
+        const categoryId = await Category.findOne({ Name: category });
+        post.CategoryId = categoryId;
+        post.Title = title;
+        post.Content = content;
+        if (req.file) {
+            post.Thumbnail = `${process.env.IMAGE_PATH}/${req.file.filename}`;
+        }
+        await post.save();
+        res.json({ message: "Uploaded successfully!", key: key });
+    }
+    catch (e) {
+        console.log(e);
+        res.json({ error: "Error" });
+    }
+});
+
+router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'), async (req, res) => {
     let key = req.params.key;
     console.log(`Updating post "${key}"...`);
     try {
@@ -138,8 +153,11 @@ router.post('/posts/delete/:key', authenticateToken, async (req, res) => {
     console.log(`Deleting post "${key}"...`);
     try {
         const post = await Post.findOne({ Key: key });
+        const thumbnail = post.Thumbnail;
+        const filename = thumbnail.substring(thumbnail.lastIndexOf("/") + 1);
         post.Deleted = true;
-        await post.save();
+        await post.save(); 
+        await unlinkAsync(`./public/images/${filename}`);
         res.json({ message: "Deleted successfully!" });
     }
     catch (e) {

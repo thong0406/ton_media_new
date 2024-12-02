@@ -19,10 +19,8 @@ export default function ArticleDetails() {
 
     const fetchData = async () => {
         try {
-            console.log(key);
             const res = await axios(`${BACKEND_URL}/posts/${key}`, {});
             const article = res.data;
-            console.log(article);
             setPost((<Article post={article} />));
             setSidebar((<ArticleSidebar category={article?.CategoryId?.Name} title="Latest" count={3} />));
         }

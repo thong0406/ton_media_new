@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { HomeIcon, ChevronRight } from "lucide-react";
-import { BACKEND_URL } from "../../constants";
+import { BACKEND_URL, FILES_URL } from "../../constants";
 import { useParams } from 'react-router-dom';
+import { Player } from 'video-react';
 import {
     EmailShareButton,
     FacebookShareButton,
@@ -19,6 +20,7 @@ import {
     XIcon,
 } from "react-share";
 import 'ckeditor5/ckeditor5.css';
+import { ARTICLE_BODY_STYLES, ARTICLE_COMPONENT_TYPES } from "../admin/editor/ArticleEditor";
 
 export default function Article(props) {
     const { key } = useParams();
@@ -29,11 +31,47 @@ export default function Article(props) {
             fetchData();
         }
     }, []);
-
-    const htmlDecode = (input) => {
-        var e = document.createElement('textarea');
-        e.innerHTML = input;
-        return e.childNodes.length === 0 ? "" : e.childNodes[0].nodeValue;
+    
+    const displayContent = (item) => {
+        console.log(item);
+        switch (item.type) {
+            case (ARTICLE_COMPONENT_TYPES.BODY):
+                const text = item.link ? (<a href={item.link} class="text-blue-600 hover:text-blue-800 hover:underline">{item.text}</a>) : item.text;
+                const className = `${item.link ? "text-blue-700 underline" : ""} ${item.bold ? "font-bold" : ""} ${item.italic ? "italic" : ""}`;
+                switch (item.style.tag) {
+                    case ("p"):
+                        return (<p className={className}>{text}</p>);
+                    case ("h1"):
+                        return (<h1 className={className}>{text}</h1>)
+                    case ("h2"):
+                        return (<h2 className={className}>{text}</h2>)
+                    case ("h3"):
+                        return (<h3 className={className}>{text}</h3>)
+                    case ("h4"):
+                        return (<h4 className={className}>{text}</h4>)
+                    default:
+                        return <></>
+                }
+            case (ARTICLE_COMPONENT_TYPES.IMAGE):
+                return (
+                    <div className="w-full flex flex-col justify-center">
+                        <img className="" src={`${FILES_URL}/images/${item.image}`} />
+                        <div className="text-sm text-center text-gray-400 italic">{item.text}</div>    
+                    </div>
+                )
+            case (ARTICLE_COMPONENT_TYPES.VIDEO):
+                return (
+                    <div className="w-full flex flex-col justify-center">
+                        <Player
+                            playsInline
+                            src={`${FILES_URL}/videos/${item.video}`}
+                        />
+                        <div className="text-sm text-center text-gray-400 italic">{item.text}</div>    
+                    </div>
+                )
+            default:
+                return <></>
+        }
     }
 
     const fetchData = async () => {
@@ -87,7 +125,11 @@ export default function Article(props) {
                 </RedditShareButton>
             </div>
             <hr />
-            <article className="mt-3" dangerouslySetInnerHTML={{__html: htmlDecode(post.Content)}}></article>
+            <article className="mt-3">
+                { (JSON.parse(decodeURIComponent(post.Content))).map((item) => 
+                    displayContent(item)
+                )}
+            </article>
         </>
     );
 }

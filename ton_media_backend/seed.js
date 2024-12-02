@@ -24,6 +24,21 @@ const images = [
     "https://image.blocktempo.com/2024/11/cftc-750x375.jpg",
 ]
 
+const ARTICLE_COMPONENT_TYPES = {
+    BODY: 1,
+    IMAGE: 2,
+    VIDEO: 3,
+}
+
+const ARTICLE_BODY_STYLES = {
+    H1: { tag: "h1", style: "margin: 0.1rem 0; font-size: 2rem;" },
+    H2: { tag: "h2", style: "margin: 0.1rem 0; font-size: 1.5rem;"},
+    H3: { tag: "h3", style: "margin: 0.1rem 0; font-size: 1.2rem;"},
+    H4: { tag: "h4", style: "margin: 0.1rem 0; font-size: 1rem; font-style: italic"},
+    P: { tag: "p", style: "line-height: 1.8" },
+    BLOCK_QUOTE: { tag: "blockquote", style: `border-left: 10px solid #ccc; margin: 1.5em 10px; padding: 0.5em 10px;` },
+}
+
 async function seedData() {
     try {
         // Generate Users
@@ -80,21 +95,31 @@ async function generatePosts(n) {
             sentenceUpperBound: 6,
             units: "sentence"
         });
-        const content = loremIpsum({
-            count: GetRandomInt(4) + 2, // Number of "words", "sentences", or "paragraphs"
-            format: "html",             // "plain" or "html"
-            paragraphLowerBound: 3,     // Min. number of sentences per paragraph.
-            paragraphUpperBound: 7,     // Max. number of sentences per paragarph.
-            random: Math.random,
-            sentenceLowerBound: 5,      // Min. number of words per sentence.
-            sentenceUpperBound: 15,     // Max. number of words per sentence.
-            units: "paragraphs",
-        });
+        const content = [];
+        for (var j = 0; j < GetRandomInt(9) + 1; j++) {
+            content.push({
+                type: ARTICLE_COMPONENT_TYPES.BODY,
+                bold: (Math.random() > 0.5),
+                italic: (Math.random() > 0.5),
+                style: ARTICLE_BODY_STYLES[Object.keys(ARTICLE_BODY_STYLES)[GetRandomInt(Object.keys(ARTICLE_BODY_STYLES).length)]],
+                link: null,
+                text: loremIpsum({
+                        count: GetRandomInt(4) + 5, // Number of "words", "sentences", or "paragraphs"
+                        format: "plain",             // "plain" or "html"
+                        paragraphLowerBound: 3,     // Min. number of sentences per paragraph.
+                        paragraphUpperBound: 7,     // Max. number of sentences per paragarph.
+                        random: Math.random,
+                        sentenceLowerBound: 5,      // Min. number of words per sentence.
+                        sentenceUpperBound: 15,     // Max. number of words per sentence.
+                        units: "sentences",
+                    }) ,
+            });
+        } 
         posts.push({
             CategoryId: category ,
             Title: title ,
             Key: TitleToKey(title) ,
-            Content: content,
+            Content: JSON.stringify(content),
             Thumbnail: images[GetRandomInt(images.length-1)],
         });
     }
