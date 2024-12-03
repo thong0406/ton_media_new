@@ -1,5 +1,5 @@
 import React from 'react';
-import Home from './pages/Home';
+import Home from './pages/home/Home';
 import LayoutHome from './layout/home/Layout';
 import './App.css';
 import './index.css';
@@ -8,10 +8,10 @@ import {
 	Routes,
 	BrowserRouter,
 } from "react-router-dom";
-import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
-import ArticleDetails from './pages/ArticleDetails';
-import CreatePost from './pages/CreatePost';
+import Login from './pages/home/Login';
+import Dashboard from './pages/admin/Dashboard';
+import ArticleDetails from './pages/home/ArticleDetails';
+import CreatePost from './pages/admin/CreatePost';
 
 function App() {
 	return (

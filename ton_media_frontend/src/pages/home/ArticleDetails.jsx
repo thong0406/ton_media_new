@@ -1,10 +1,10 @@
 import axios from "axios";
-import { BACKEND_URL } from "../constants";
+import { BACKEND_URL } from "../../constants";
 import React, { useEffect, useState } from "react";
-import { ArticleCardOverlay } from "../components/home/ArticleCardOverlay";
-import { ArticleCardSide } from "../components/home/ArticleCardSide";
-import Article from "../components/home/Article";
-import ArticleSidebar from "../components/home/ArticleSidebar";
+import { ArticleCardOverlay } from "../../components/home/ArticleCardOverlay";
+import { ArticleCardSide } from "../../components/home/ArticleCardSide";
+import Article from "../../components/home/Article";
+import ArticleSidebar from "../../components/home/ArticleSidebar";
 import { useParams } from "react-router-dom";
 
 export default function ArticleDetails() {

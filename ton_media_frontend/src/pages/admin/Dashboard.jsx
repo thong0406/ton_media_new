@@ -1,10 +1,10 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { BACKEND_URL } from "../constants";
-import { ArticleCardSide } from "../components/home/ArticleCardSide";
+import { BACKEND_URL } from "../../constants";
+import { ArticleCardSide } from "../../components/home/ArticleCardSide";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Select } from "@headlessui/react";
-import { Paginate } from "../util";
+import { Paginate } from "../../util";
 
 export default function Dashboard() {
 

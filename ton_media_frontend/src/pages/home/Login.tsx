@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from '../constants';
+import { BACKEND_URL } from '../../constants';
 import  { redirect } from 'react-router-dom'
 
 export default function Login() {

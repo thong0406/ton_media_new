@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BACKEND_URL, CATEGORIES } from "../constants";
+import { BACKEND_URL, CATEGORIES } from "../../constants";
 import axios from "axios";
 import 'ckeditor5/ckeditor5.css';
-import { ArticleEditor } from "../components/admin/editor/ArticleEditor";
+import { ArticleEditor } from "../../components/admin/editor/ArticleEditor";
 import { ChevronRight, Home, X } from "lucide-react";
 import { useParams } from "react-router-dom";
 

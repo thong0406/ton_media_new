@@ -1,12 +1,12 @@
 import axios from "axios";
-import { BACKEND_URL, CATEGORIES } from "../constants";
+import { BACKEND_URL, CATEGORIES } from "../../constants";
 import React, { useEffect, useState } from "react";
-import { ArticleCardOverlay } from "../components/home/ArticleCardOverlay";
-import { ArticleCardSide } from "../components/home/ArticleCardSide";
-import ArticleCarousel from "../components/home/ArticleCarousel";
-import ArticleSidebar from "../components/home/ArticleSidebar";
+import { ArticleCardOverlay } from "../../components/home/ArticleCardOverlay";
+import { ArticleCardSide } from "../../components/home/ArticleCardSide";
+import ArticleCarousel from "../../components/home/ArticleCarousel";
+import ArticleSidebar from "../../components/home/ArticleSidebar";
 import { ArrowRight, ArrowLeft } from "lucide-react";
-import ArticleCatalog from "../components/home/ArticleCatalog";
+import ArticleCatalog from "../../components/home/ArticleCatalog";
 
 export default function Home() {
 
