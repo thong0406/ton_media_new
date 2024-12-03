@@ -28,6 +28,7 @@ function App() {
 				<Route path="/admin" element={<LayoutHome />}>
 					<Route path="/admin/posts/dashboard" element={<Dashboard />} />
 					<Route path="/admin/posts/create" element={<CreatePost />} />
+					<Route path="/admin/posts/edit/:key" element={<CreatePost />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

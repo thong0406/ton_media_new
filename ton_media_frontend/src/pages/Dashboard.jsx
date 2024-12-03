@@ -4,13 +4,15 @@ import { BACKEND_URL } from "../constants";
 import { ArticleCardSide } from "../components/home/ArticleCardSide";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { Select } from "@headlessui/react";
+import { Paginate } from "../util";
 
 export default function Dashboard() {
 
-    const [page, setPages] = useState(1);
+    const [page, setPage] = useState(1);
     const [count, setCount] = useState(10);
+    const [limit, setLimit] = useState(0);
     const [category, setCategory] = useState(null);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState("");
     const [cols, setCols] = useState(3);
     const [deleted, setDeleted] = useState(false);
 
@@ -31,12 +33,12 @@ export default function Dashboard() {
     const fetchPosts = async () => {
         try {
             setLoadingPosts(true);
-            const url = `${BACKEND_URL}/posts/all${category ? `/${category}` : ""}?page=${page}&query=${query}&count=${count}${deleted ? "&deleted=true" : ""}`;
-            console.log(url);
+            const url = `${BACKEND_URL}/posts/all`;
             const res = await axios.get(url);
             const posts = res.data;
             setPosts(posts);
             setLoadingPosts(false);
+            nextPage(0);
         }
         catch (e) {
             console.log(e);
@@ -60,7 +62,6 @@ export default function Dashboard() {
 
     const deletePost = async (key) => {
         try {
-            console.log(localStorage.getItem('jwtToken'))
             const res = await axios.post(`${BACKEND_URL}/posts/delete/${key}`, {}, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
@@ -74,6 +75,12 @@ export default function Dashboard() {
         }
     }
 
+    const nextPage = (change) => {
+        const curPage = page + 0;
+        const newPage = Math.max(Math.min(curPage + change, Math.ceil(posts.length/count)), 1);
+        setPage(newPage);
+    }
+
     return (
         <>
             <div className="">
@@ -82,8 +89,8 @@ export default function Dashboard() {
                     <hr className="my-4" />
                     <div className="flex justify-between gap-5">
                         <div className="flex gap-5 items-center">
-                            <button><ArrowLeft /></button>
-                            <button><ArrowRight /></button>
+                            <button onClick={() => {nextPage(-1)}}><ArrowLeft /></button>
+                            <button onClick={() => {nextPage(1)}}><ArrowRight /></button>
                             <span className="text-gray-400">Page {page}</span>
                         </div>
                         <input onChange={(e) => {setQuery(e.target.value)}} value={query} className="rounded-md p-2 border border-gray-400"/>
@@ -106,11 +113,13 @@ export default function Dashboard() {
                             <option value={30}>30</option>
                         </Select>
                         <input type="number" min={1} max={3} onChange={(e) => {setCols(e.target.value)}} value={cols} className="rounded-md p-2 border border-gray-400"/>
-                        <button onClick={() => {fetchPosts()}}>Filter</button>
                     </div>
                 </div>
                 <div className={`grid grid-cols-${cols} gap-y-4`}>
-                    { posts.map((post) => 
+                    { Paginate(posts.filter((post) => {
+                        return (post.Title.toLowerCase().startsWith(query.toLowerCase()))
+                            && (!category || post.CategoryId.Name == category)
+                    }), count, page).map((post) => 
                         (<div key={post._id}>
                             <ArticleCardSide post={post} />
                             <a href={`/admin/posts/edit/${post.Key}`} className="rounded-md bg-red-500 text-white py-2 px-4">Edit</a>

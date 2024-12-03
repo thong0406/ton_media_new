@@ -1,5 +1,5 @@
 import { Pencil, X } from "lucide-react";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import FileLoader from "../file_loader/FileLoader";
 import { FILES_URL } from "../../../constants";
 import ArticleEditorBody from "./ArticleEditorBody";
@@ -23,7 +23,13 @@ export const ARTICLE_BODY_STYLES = {
 
 export const ArticleEditor = forwardRef((props, ref) => {
 
-    const [content, setContent] = useState(props.post ? JSON.parse(decodeURIComponent(props.post.Content)) : []);
+    const [content, setContent] = useState([]);
+
+    useEffect(() => {
+        if (props.content) {
+            setContent(JSON.parse(decodeURIComponent(props.content)));
+        }
+    }, []);
 
     // Misc
     const toHtml = () => {
@@ -49,6 +55,7 @@ export const ArticleEditor = forwardRef((props, ref) => {
     useImperativeHandle(ref, () => ({
         toHtml: toHtml,
         toJsonString: toJsonString,
+        print: () => {console.log(content)}
     }));
 
     const deleteItem = (index) => {

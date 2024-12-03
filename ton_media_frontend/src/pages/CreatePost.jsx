@@ -1,12 +1,10 @@
-import React, { FormEvent, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BACKEND_URL, CATEGORIES } from "../constants";
 import axios from "axios";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { CKEDITOR_CONFIG } from "../components/admin/CKEditorConfig";
-import { ClassicEditor } from "ckeditor5";
 import 'ckeditor5/ckeditor5.css';
 import { ArticleEditor } from "../components/admin/editor/ArticleEditor";
-import { ChevronRight, Home } from "lucide-react";
+import { ChevronRight, Home, X } from "lucide-react";
+import { useParams } from "react-router-dom";
 
 export default function CreatePost() {
 
@@ -14,33 +12,49 @@ export default function CreatePost() {
     const [category, setCategory] = useState(CATEGORIES[0]);
     const articleEditorRef = useRef();
     const [thumbnail, setThumbnail] = useState(null);
-    const [key, setKey] = useState('');
-
-    const editorContainerRef = useRef(null);
-    const editorRef = useRef(null);
-    const [isLayoutReady, setIsLayoutReady] = useState(false);
+    const [message, setMessage] = useState(null);
+    const [edit, setEdit] = useState(false);
+    const [post, setPost] = useState(null);
+    const { key } = useParams();
+    const [editor, setEditor] = useState(<ArticleEditor ref={articleEditorRef} />);
 
     useEffect(() => {
-        setIsLayoutReady(true);
-
-        return () => setIsLayoutReady(false);
+        if (key) {
+            fetchPost(key);
+            setEdit(true);
+        }
     }, []);
+
+    const fetchPost = async (key) => {
+        try {
+            const res = await axios.get(`${BACKEND_URL}/posts/${key}`);
+            const post = res.data;
+            console.log(post);
+            setPost(post);
+            setTitle(post.Title);
+            setCategory(post.CategoryId.Name);
+            if (key) {
+                setEditor(<ArticleEditor content={post ? post.Content : null} ref={articleEditorRef} />);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
     const submitPost = async (e) => {
         e.preventDefault();
         try {
-            console.log(thumbnail);
             const form = new FormData();
             form.append('title', title);
             form.append('thumbnail', thumbnail);
             form.append('content', articleEditorRef.current.toJsonString());
-            const res = await axios.post(`${BACKEND_URL}/posts/create`, form, {
+            console.log(articleEditorRef.current.print());
+            const res = await axios.post(`${BACKEND_URL}/posts/${edit ? `update/${key}` : "create"}`, form, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
                 }
             });
-            setKey(res.key);
-
+            setMessage(<p className="text-white text-center w-100">{edit ? "Update thành công!" : "Tạo thành công!"} <a href={`/posts/${key}`}>Link</a></p>);
         } catch (e) {
             console.log(e);
         }
@@ -53,7 +67,12 @@ export default function CreatePost() {
     }
 
     return (
-        <>
+        <div className="relative">
+            { message &&
+                (<div className="absolute w-100 p-2 bg-green-500 text-white flex justify-center items-center gap-4">
+                    { message }<button onClick={() => {setMessage(null)}}><X /></button>
+                </div>)
+            }
             <div className="flex justify-center">
                 <button onClick={submitPost} className="rounded bg-black text-white text-center py-2 px-4">Submit</button>
             </div>
@@ -108,9 +127,9 @@ export default function CreatePost() {
                         type="file"
                     />
                 </div>
-                <img src={thumbnail ? URL.createObjectURL(thumbnail) : "/images/no_image_thumbnail.webp"} alt={""} className="w-full" />
-                <ArticleEditor ref={articleEditorRef} />
+                <img src={thumbnail ? URL.createObjectURL(thumbnail) : (post ? post.Thumbnail : "/images/no_image_thumbnail.webp")} alt={""} className="w-full" />
+                { editor }
             </div>
-        </>
+        </div>
     );
 }

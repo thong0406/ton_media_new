@@ -10,7 +10,7 @@ export default function ArticleEditorBody({ text, setText, index, bold, setBold,
 
     return (
         <div className="relative w-full">
-            <textarea className={`w-full border border-gray-300 rounded-sm ${hasLink ? "text-blue-700 underline" : ""} ${bold ? "font-bold" : ""} ${italic ? "italic" : ""}`} value={text} onChange={(e) => { setText(e.target.value, index); }} style={GetStyleObjectFromString(style.style)} />
+            <textarea className={`w-full h-auto h-fit focus:border focus:border-gray-300 rounded-sm ${hasLink ? "text-blue-700 underline" : ""} ${bold ? "font-bold" : ""} ${italic ? "italic" : ""}`} value={text} onChange={(e) => { setText(e.target.value, index); }} style={GetStyleObjectFromString(style.style)} />
             <div className="absolute -top-2 right-7">
                 <button className="rounded-full p-1 bg-blue-600 text-white flex justify-center items-center" onClick={() => {setDropdown(!dropdown)}}><Pencil /></button>
                 <div className="relative">

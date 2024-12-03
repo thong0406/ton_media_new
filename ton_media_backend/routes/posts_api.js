@@ -43,6 +43,20 @@ router.get('/posts/all', async (req, res) => {
     }
 });
 
+router.get('/posts/all/count', async (req, res) => {
+    console.log("Finding posts count...");
+    const query = req.query.query ?? "";
+    const deleted = req.query.deleted ? true : false;
+    try {
+        const posts = await Post.find({ Title: { $regex: `.*${query}.*` }, Deleted: deleted }).populate("CategoryId");
+        res.send({count: posts.length});
+    }
+    catch (e) {
+        console.log(e);
+        res.json({ error: "Error" });
+    }
+});
+
 router.get('/posts/all/:category', async (req, res) => {
     const categoryName = req.params.category;
     const count = parseInt(req.query.count) ?? 9;
@@ -50,11 +64,27 @@ router.get('/posts/all/:category', async (req, res) => {
     const query = req.query.query ?? "";
     const offset = Math.max(page - 1, 0) * count;
     const deleted = req.query.deleted ? true : false;
-    console.log(`Finding posts by categroy: "${categoryName}"...`);
+    console.log(`Finding posts by category: "${categoryName}"...`);
     try {
         const category = await Category.findOne({ Name: categoryName });
         const posts = await Post.find({ CategoryId: category._id, Deleted: deleted, Title: { $regex: `.*${query}.*` } }).populate("CategoryId").sort({ createdAt: -1 }).limit(count).skip(offset);
         res.json(posts);
+    }
+    catch (e) {
+        console.log(e);
+        res.json({ error: "Error" });
+    }
+});
+
+router.get('/posts/all/:category/count', async (req, res) => {
+    const categoryName = req.params.category;
+    const query = req.query.query ?? "";
+    const deleted = req.query.deleted ? true : false;
+    console.log(`Finding posts count by category: "${categoryName}"...`);
+    try {
+        const category = await Category.findOne({ Name: categoryName });
+        const posts = await Post.find({ CategoryId: category._id, Deleted: deleted, Title: { $regex: `.*${query}.*` } }).populate("CategoryId");
+        res.send({count: posts.length});
     }
     catch (e) {
         console.log(e);
