@@ -69,71 +69,71 @@
 # API Bài đăng:
 
 ## `GET:/api/posts/all?query=...&count=...&page=...&deleted=...`
-  - **Trả về:**: Danh sách các Post
-  - **Params**: 
+  - **Trả về:** Danh sách các Post
+  - **Params:** 
     - `query`: Tìm kiếm (VD: `query=Abc` => Tìm các Post có tiêu đề bắt đầu bằng `"Abc"`)
     - `count`: Số Post trả lại
     - `deleted`: true => Hiển thị các Post đã "xóa"; false/không có giá trị => Hiển thị tất cả các Post chưa bị "xóa"
     - `page`: Trang số n (n >= 1) của danh sách Post
 
 ## `GET:/api/posts/<category>?query=..&count=...&page=...&deleted=....` 
-  - **Trả về**: Danh sách các post thuộc thể loại `category`
-  - **Params**: 
+  - **Trả về:** Danh sách các post thuộc thể loại `category`
+  - **Params:** 
     - `query`: Tìm kiếm (VD: `query=Abc` => Tìm các Post có tiêu đề bắt đầu bằng `"Abc"`)
     - `count`: Số Post trả lại
     - `deleted`: true => Hiển thị các Post đã "xóa"; false/không có giá trị => Hiển thị tất cả các Post chưa bị "xóa"
     - `page`: Trang số n (n >= 1) của danh sách Post
 
 ## `GET:/api/posts/<key>`
-  - **Trả về:**: Post có `key`
+  - **Trả về:** Post có `key`
 
 ## `GET:/api/posts/all?query=...&deleted=...`
-  - **Trả về:**: Tổng số các Post
-  - **Params**: 
+  - **Trả về:** Tổng số các Post
+  - **Params:** 
     - `query`: Tìm kiếm (VD: `query=Abc` => Đếm các Post có tiêu đề bắt đầu bằng `"Abc"`)
     - `deleted`: true => Đếm các Post đã "xóa"; false/không có giá trị => Đếm tất cả các Post chưa bị "xóa"
       
 ## `GET:/api/posts/<category>?query=...&deleted=...`
-  - **Trả về:**: Tổng số các Post thuộc thể loại `category`
-  - **Params**: 
+  - **Trả về:** Tổng số các Post thuộc thể loại `category`
+  - **Params:** 
     - `query`: Tìm kiếm (VD: `query=Abc` => Đếm các Post có tiêu đề bắt đầu bằng `"Abc"`)
     - `deleted`: true => Đếm các Post đã "xóa"; false/không có giá trị => Đếm tất cả các Post chưa bị "xóa"
    
 ## `POST:/api/posts/create`
-  - **Trả về**: Post đã được tạo
+  - **Trả về:** Post đã được tạo
   - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
-  - **Body**:
+  - **Body:**
     - `title`: Tiêu đề
     - `category`: Tên thể loại Category
     - `thumbnail`: File hình thumbnail
     - `content`: String JSON lấy từ component `<ArticleEditor />`
    
 ## `POST:/api/posts/update/<key>`
-  - **Trả về**: Post đã được cập nhật
-  - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
-  - **Body**:
+  - **Trả về:** Post đã được cập nhật
+  - **Cần jwtToken:** (Header chứa `Bearer <jwtToken>`)
+  - **Body:**
     - `title`: Tiêu đề
     - `category`: Tên thể loại Category
     - `thumbnail`: File hình thumbnail
     - `content`: String JSON lấy từ component `<ArticleEditor />`
 
 ## `POST:/api/posts/delete/<key>`
-  - **Chức năng**: "xóa" một Post (Đặt `Deleted=true` của Post)
-  - **Trả về**: `Key` của Post đã "xóa"
-  - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
+  - **Chức năng:** "xóa" một Post (Đặt `Deleted=true` của Post)
+  - **Trả về:** `Key` của Post đã "xóa"
+  - **Cần jwtToken:** (Header chứa `Bearer <jwtToken>`)
 
 ## `POST:/api/posts/undelete/<key>`
-  - **Chức năng**: gỡ "xóa" một Post (Đặt `Deleted=false` của Post)
-  - **Trả về**: `Key` của Post đã gỡ "xóa"
+  - **Chức năng:** gỡ "xóa" một Post (Đặt `Deleted=false` của Post)
+  - **Trả về:** `Key` của Post đã gỡ "xóa"
   - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
 
 ## `POST:/api/posts/clear`
-  - **Chức năng**: Xóa tất cả các Post từ DB
+  - **Chức năng:** Xóa tất cả các Post từ DB
   - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
 
 # API Thể loại (Category):
-  - `/api/posts/all`
-  - `
+
+# API Người dùng (User):
 
 # CÁC COMPONENTS:
 - `Article`              : Chi tiết post đầy đủ
