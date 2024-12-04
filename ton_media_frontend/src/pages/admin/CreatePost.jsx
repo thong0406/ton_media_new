@@ -34,7 +34,7 @@ export default function CreatePost() {
             setTitle(post.Title);
             setCategory(post.CategoryId.Name);
             if (key) {
-                setEditor(<ArticleEditor content={post ? post.Content : null} ref={articleEditorRef} />);
+                setEditor(<ArticleEditor content={post.Content} ref={articleEditorRef} />);
             }
         } catch (e) {
             console.log(e);
@@ -47,6 +47,7 @@ export default function CreatePost() {
             const form = new FormData();
             form.append('title', title);
             form.append('thumbnail', thumbnail);
+            form.append('category', category);
             form.append('content', articleEditorRef.current.toJsonString());
             console.log(articleEditorRef.current.print());
             const res = await axios.post(`${BACKEND_URL}/posts/${edit ? `update/${key}` : "create"}`, form, {

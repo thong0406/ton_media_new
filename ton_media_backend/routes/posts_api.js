@@ -126,32 +126,6 @@ router.post('/posts/create', authenticateToken, upload.single('thumbnail'), asyn
 });
 
 router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'), async (req, res) => {
-    const key = req.params.key;
-    console.log(`Updating post "${key}" ...`);
-    try {
-        const {
-            title, 
-            content,
-            category,
-        } = req.body;
-        const post = Post.findOne({ Key: key });
-        const categoryId = await Category.findOne({ Name: category });
-        post.CategoryId = categoryId;
-        post.Title = title;
-        post.Content = content;
-        if (req.file) {
-            post.Thumbnail = `${process.env.IMAGE_PATH}/${req.file.filename}`;
-        }
-        await post.save();
-        res.json({ message: "Uploaded successfully!", key: key });
-    }
-    catch (e) {
-        console.log(e);
-        res.json({ error: "Error" });
-    }
-});
-
-router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'), async (req, res) => {
     let key = req.params.key;
     console.log(`Updating post "${key}"...`);
     try {
@@ -161,14 +135,13 @@ router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'),
             category
         } = req.body;
         const post = await Post.findOne({ Key: key, Deleted: false }).populate("CategoryId");
-        if (category != post.CategoryId.Name) {
-            const categoryId = await Category.findOne({ Name: category });
-            post.CategoryId = categoryId;
-        }
+        console.log(category);
+        const categoryId = await Category.findOne({ Name: category });
+        console.log(categoryId.Name);
+        post.CategoryId = categoryId;
         post.Title = title;
-        post.Key = TitleToKey(title);
         post.Content = content;
-        if (file) post.Thumbnail = `${process.env.IMAGE_PATH}/${req.file.filename}`;
+        if (res.file) post.Thumbnail = `${process.env.IMAGE_PATH}/${req.file.filename}`;
         await post.save();
         res.json({ message: "Uploaded successfully!", key: key });
     }

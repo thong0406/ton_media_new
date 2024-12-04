@@ -49,6 +49,8 @@ export default function Article(props) {
                         return (<h3 className={className}>{text}</h3>)
                     case ("h4"):
                         return (<h4 className={className}>{text}</h4>)
+                    case ("blockquote"):
+                        return (<blockquote className={className}>{text}</blockquote>)
                     default:
                         return <></>
                 }

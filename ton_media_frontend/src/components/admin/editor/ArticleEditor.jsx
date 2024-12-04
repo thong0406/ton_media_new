@@ -1,10 +1,12 @@
 import { Pencil, X } from "lucide-react";
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import FileLoader from "../file_loader/FileLoader";
-import { FILES_URL } from "../../../constants";
+import { BACKEND_URL, FILES_URL } from "../../../constants";
 import ArticleEditorBody from "./ArticleEditorBody";
 import { Player } from 'video-react';
 import ArticleEditorBetween from "./ArticleEditorBetween";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export const ARTICLE_COMPONENT_TYPES = {
     BODY: 1,
@@ -23,13 +25,22 @@ export const ARTICLE_BODY_STYLES = {
 
 export const ArticleEditor = forwardRef((props, ref) => {
 
-    const [content, setContent] = useState([]);
+    const { key } = useParams();
+    const [content, setContent] = useState(props.content ? JSON.parse(decodeURIComponent(props.content)) : []);
 
     useEffect(() => {
-        if (props.content) {
-            setContent(JSON.parse(decodeURIComponent(props.content)));
+        if (key) fetchContent();
+    }, [])
+
+    const fetchContent = async () => {
+        try {
+            const res = await axios.get(`${BACKEND_URL}/posts/${key}`);
+            const _content = res.data.Content;
+            setContent(_content ? JSON.parse(decodeURIComponent(_content)) : []);
+        } catch (e) {
+            console.log(e);
         }
-    }, []);
+    }
 
     // Misc
     const toHtml = () => {
@@ -141,6 +152,7 @@ export const ArticleEditor = forwardRef((props, ref) => {
 
     return (
         <>
+            <button className="" onClick={() => {console.log(content)}}>aaa</button>
             <div className="block mt-2 w-full">
                 { content.map((item, index) => {
                     return (
