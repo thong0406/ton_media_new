@@ -7,7 +7,7 @@ const compression = require('compression');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const apiRoutes = require('./routes/api');
+const usersApiRoutes = require('./routes/users_api');
 const postsApiRoutes = require('./routes/posts_api');
 const categoriesApiRoutes = require('./routes/categories_api');
 const filesApiRoutes = require('./routes/files_api');
@@ -48,7 +48,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
     .catch((error) => console.log('MongoDB connection error:', error));
 
 // API routes
-app.use('/api', apiRoutes);
+app.use('/api', usersApiRoutes);
 app.use('/api', postsApiRoutes);
 app.use('/api', categoriesApiRoutes);
 app.use('/api', filesApiRoutes);

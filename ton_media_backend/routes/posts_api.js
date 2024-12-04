@@ -117,7 +117,7 @@ router.post('/posts/create', authenticateToken, upload.single('thumbnail'), asyn
         const categoryId = await Category.findOne({ Name: category });
         const post = new Post({ Title: title, Content: content, Key: key, Thumbnail: `${process.env.IMAGE_PATH}/${req.file.filename}`, CategoryId: categoryId });
         await post.save();
-        res.json({ message: "Uploaded successfully!", key: key });
+        res.json(post);
     }
     catch (e) {
         console.log(e);
@@ -143,7 +143,7 @@ router.post('/posts/update/:key', authenticateToken, upload.single('thumbnail'),
         post.Content = content;
         if (res.file) post.Thumbnail = `${process.env.IMAGE_PATH}/${req.file.filename}`;
         await post.save();
-        res.json({ message: "Uploaded successfully!", key: key });
+        res.json(post);
     }
     catch (e) {
         console.log(e);
@@ -157,10 +157,24 @@ router.post('/posts/delete/:key', authenticateToken, async (req, res) => {
     try {
         const post = await Post.findOne({ Key: key });
         const thumbnail = post.Thumbnail;
-        const filename = thumbnail.substring(thumbnail.lastIndexOf("/") + 1);
         post.Deleted = true;
-        await post.save(); 
-        await unlinkAsync(`./public/images/${filename}`);
+        await post.save();
+        res.json({ message: "Deleted successfully!" });
+    }
+    catch (e) {
+        console.log(e);
+        res.json({ error: "Error" });
+    }
+});
+
+router.post('/posts/undelete/:key', authenticateToken, async (req, res) => {
+    const key = req.params.key;
+    console.log(`Deleting post "${key}"...`);
+    try {
+        const post = await Post.findOne({ Key: key });
+        const thumbnail = post.Thumbnail;
+        post.Deleted = false;
+        await post.save();
         res.json({ message: "Deleted successfully!" });
     }
     catch (e) {

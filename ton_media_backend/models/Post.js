@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-    UserId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-    },
     CategoryId: {
         type: Schema.Types.ObjectId,
         ref: "Category",
@@ -13,7 +9,7 @@ const postSchema = new Schema({
     Thumbnail: {
         type: String,
         required: true,
-        default: "https://image.blocktempo.com/2024/11/20241120113534.jpg",
+        default: "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg",
     },
     Title: {
         type: String,

@@ -15,7 +15,7 @@ export default function CreatePost() {
     const [message, setMessage] = useState(null);
     const [edit, setEdit] = useState(false);
     const [post, setPost] = useState(null);
-    const { key } = useParams();
+    let { key } = useParams();
     const [editor, setEditor] = useState(<ArticleEditor ref={articleEditorRef} />);
 
     useEffect(() => {
@@ -55,7 +55,8 @@ export default function CreatePost() {
                     Authorization: `Bearer ${localStorage.getItem('jwtToken')}`
                 }
             });
-            setMessage(<p className="text-white text-center w-100">{edit ? "Update thành công!" : "Tạo thành công!"} <a href={`/posts/${key}`}>Link</a></p>);
+            const _key = res.data.Key;
+            setMessage(<p className="text-white text-center w-100">{edit ? "Update thành công!" : "Tạo thành công!"} <a href={`/posts/${_key}`}>Link</a></p>);
         } catch (e) {
             console.log(e);
         }
