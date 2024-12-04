@@ -117,7 +117,7 @@ export default function Dashboard() {
                 </div>
                 <div className={`grid grid-cols-${cols} gap-y-4`}>
                     { Paginate(posts.filter((post) => {
-                        return (post.Title.toLowerCase().startsWith(query.toLowerCase()))
+                        return (post.Title.toLowerCase().includes(query.toLowerCase()))
                             && (!category || post.CategoryId.Name == category)
                     }), count, page).map((post) => 
                         (<div key={post._id}>
