@@ -1,4 +1,5 @@
-# MODEL:
+# Loại dữ liệu:
+
 ## User:
 ```
 {
@@ -20,6 +21,7 @@
 }
 ```
 + `AccessToken`: Là jwtToken của người dùng, phải lưu lại vào `localStorage.getItem("jwtToken")` để sử dụng một số API
+
 ## Thể loại (Category):
 ```
 {
@@ -29,6 +31,7 @@
     }
 }
 ```
+
 ## Bài đăng (Post):
 ```
 {
