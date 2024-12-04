@@ -1,6 +1,7 @@
 ### MODEL:
 ## User:
-`{
+```
+{
     Name: {
         type: String,
         required: true,
@@ -16,7 +17,8 @@
     AccessToken: {
         type: String,
     },
-}`
+}
+```
 
 ### API:
 
