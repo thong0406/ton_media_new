@@ -15,7 +15,7 @@ export default function ArticleEditorBetween({ index, addParagraph, addImage, ad
             <div className="relative">
                 <button className={ `flex items-center justify-center rounded-full ${active ? "bg-blue-700" : "bg-blue-500"} aspect-square text-white p-2` } onClick={() => {setActive(!active)}}><PlusIcon /></button>
                 {active && (
-                    <div className="absolute top-6 bg-white rounded-sm z-10">
+                    <div className="absolute bottom-12 bg-white rounded-sm z-10">
                         <div className="relative flex flex-col">
                             <button className={`hover:text-black text-gray-500 p-2 border border-b-gray-500`} onClick={() => {addParagraph({ style: ARTICLE_BODY_STYLES.P}, index); setActive(false);}}>Body</button>
                             <button className={`hover:text-black text-gray-500 p-2 border border-b-gray-500`} onClick={() => {addParagraph({ style: ARTICLE_BODY_STYLES.H1}, index); setActive(false);}}>H1</button>

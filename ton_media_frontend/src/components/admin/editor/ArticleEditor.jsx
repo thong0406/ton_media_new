@@ -152,7 +152,6 @@ export const ArticleEditor = forwardRef((props, ref) => {
 
     return (
         <>
-            <button className="" onClick={() => {console.log(content)}}>aaa</button>
             <div className="block mt-2 w-full">
                 { content.map((item, index) => {
                     return (

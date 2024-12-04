@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { BACKEND_URL, FILES_URL } from "../../../constants";
-import { File, FileUp, X } from "lucide-react";
+import { File, FileUp, TriangleAlert, X } from "lucide-react";
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css"; 
 
@@ -14,7 +14,8 @@ export default function FileLoader({ onClick, onClose, type }) {
     const [images, setImages] = useState([]);
     const [videos, setVideos] = useState([]);
     const [active, setActive] = useState(type ?? FILE_LOADER_FILE_TYPES.IMAGES);
-    const [deleteHandler, setDeleteHandler] = useState(() => {});
+    const [deleteDialog, setDeleteDialog] = useState(false);
+    const [filename, setFilename] = useState('');
 
     useEffect(() => {
         fetchImages();
@@ -144,11 +145,22 @@ export default function FileLoader({ onClick, onClose, type }) {
                 </div>
             </div>
             <div className="h-full">
+                { /** Delete Dialog */} 
+                {deleteDialog && <div className="w-full p-2 bg-red-400 text-white flex gap-4 items-center">
+                    <div className="col"><TriangleAlert className="text-white" /></div>
+                    <div className="col-auto">
+                        <div className="font-bold">Bạn có chắc có muốn xóa file "{filename}"? Có thể file đang được sử dụng ở đâu khác.</div>
+                        <div className="flex justify-between w-full mt-2">
+                            <button onClick={() => {setDeleteDialog(false)}} className="py-1 px-2 border border-white rounded-sm font-bold">Không</button>
+                            <button onClick={() => {(active === FILE_LOADER_FILE_TYPES.IMAGES ? deleteImageHandler(filename) : deleteVideoHandler(filename)); setDeleteDialog(false)}} className="py-1 px-2 border border-white rounded-sm">Có</button>
+                        </div>
+                    </div>
+                </div>}
                 <div className="grid w-full grid-cols-2 p-3 gap-4 h-full overflow-y-scroll">
                     {(active === FILE_LOADER_FILE_TYPES.IMAGES ? images : videos).map((file, ind) => (
                         <div className="relative" key={ind}>
                             <div className="absolute z-10" style={{top: -10, right: -10}}>
-                                <button className={ `flex items-center justify-center relative rounded-full aspect-square text-black bg-white` } onClick={() => {active === FILE_LOADER_FILE_TYPES.IMAGES ? deleteImageHandler(file) : deleteVideoHandler(file)}}>
+                                <button className={ `flex items-center justify-center relative rounded-full aspect-square text-black bg-white` } onClick={() => {setFilename(file); setDeleteDialog(true)}}>
                                     <X />
                                 </button>
                             </div>
