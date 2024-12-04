@@ -19,6 +19,49 @@
     },
 }
 ```
++ `AccessToken`: Là jwtToken của người dùng, phải lưu lại vào `localStorage.getItem("jwtToken")` để sử dụng một số API
+## Thể loại (Category):
+```
+{
+    Name: {
+        type: String,
+        required: true,
+    }
+}
+```
+## Bài đăng (Post):
+```
+{
+    CategoryId: {
+        type: Schema.Types.ObjectId,
+        ref: "Category",
+    },
+    Thumbnail: {
+        type: String,
+        required: true,
+    },
+    Title: {
+        type: String,
+        required: true,
+    },
+    Key: {
+        type: String,
+        required: true,
+    },
+    Content: {
+        type: String,
+        required: true,
+    },
+    Deleted: {
+        type: Boolean,
+        required: true,
+        default: false,
+    }
+}
+```
++ `Content`: Là một danh sách dữ liệu phức tạp; <ins>**không phải là một đoạn text hoặc HTML**</ins>
++ `Deleted`: True/False; Biểu thị nếu post đã bị "xóa" hay chưa
++ `Key`: Cái đoạn để cuối của link Post (VD: Post có tiêu đề "Đây là tiêu đề" => Có key "Đây-là-tiêu-đề-12315125" => Link đến "/posts/:key")
 
 ### API:
 
