@@ -68,20 +68,27 @@
 
 # API Bài đăng:
 
-## `GET:/api/posts/all?query=...`
-  + **Trả về:**: Danh sách các Post
+## `GET:/api/posts/all?query=...&count=...&page=...&deleted=...`
+  - **Trả về:**: Danh sách các Post
+  - **Params**: 
+    - `query`: Tìm kiếm (VD: `query=Abc` => Tìm các Post có tiêu đề bắt đầu bằng "Abc")
+    - `count`: Số Post trả lại
+    - `deleted`: true => Hiển thị các Post đã "xóa"; false/không có giá trị => Hiển thị tất cả các Post chưa bị "xóa"
+    - `page`: Trang số n (n >= 1) của danh sách Post
 
-  - `/api/posts/<category>?query=...` : Trả danh sách các post thuộc thể loại `category`
-  - `/api/posts/:key`                 : Trả post có `key` (VD: "ten-post-12314")
-  - `/api/posts/delete/:key`          : Xóa post có `key`
-  - `/api/posts/update/:key`          : Update post có `key`
-  - `/api/posts/all/count`            : Trả về tổng số post trong DB
-  - `/api/posts/<category>/count`     : Trả về tổng số post thuộc thể loại `category` trong DB
-- **API Thể loại (Category)**:
+## `GET:/api/posts/<category>?query=..&count=...&page=...&deleted=....` 
+  - **Trả về**: Danh sách các post thuộc thể loại `category`
+  - **Params**: 
+    - `query`: Tìm kiếm (VD: `query=Abc` => Tìm các Post có tiêu đề bắt đầu bằng "Abc")
+    - `count`: Số Post trả lại
+    - `deleted`: true => Hiển thị các Post đã "xóa"; false/không có giá trị => Hiển thị tất cả các Post chưa bị "xóa"
+    - `page`: Trang số n (n >= 1) của danh sách Post
+
+# API Thể loại (Category):
   - `/api/posts/all`
   - `
 
-## CÁC COMPONENTS:
+# CÁC COMPONENTS:
 - `Article`              : Chi tiết post đầy đủ
 - `ArticleCardOverlay`   : Link post, tiêu đề post nằm đè lên ảnh
 - `ArticleCardSide`      : Link post, tiêu đề post nằm bên phải ảnh
@@ -89,7 +96,7 @@
 - `ArticleCatalog`       : Danh sách link các post
 - `ArticleSidebar`       : 
 
-## CÁC THỨ CHƯA LÀM
+# CÁC THỨ CHƯA LÀM
 - Chưa responsive
 - Chưa có trang chỉ chứa các post theo thể loại (`/posts/:category`)
 - Chưa có trang search
