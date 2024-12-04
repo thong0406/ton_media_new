@@ -1,4 +1,4 @@
-### MODEL:
+# MODEL:
 ## User:
 ```
 {
@@ -63,11 +63,9 @@
 + `Deleted`: True/False; Biểu thị nếu post đã bị "xóa" hay chưa
 + `Key`: Cái đoạn để cuối của link Post (VD: Post có tiêu đề "Đây là tiêu đề" => Có key "Đây-là-tiêu-đề-12315125" => Link đến "/posts/:key")
 
-### API:
+# API Bài đăng:
 
-## API Post:
-
-# `GET:/api/posts/all?query=...`
+## `GET:/api/posts/all?query=...`
   + **Trả về:**: Danh sách các Post
 
   - `/api/posts/<category>?query=...` : Trả danh sách các post thuộc thể loại `category`
