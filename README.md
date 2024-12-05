@@ -100,6 +100,7 @@
     - `deleted`: true => Đếm các Post đã "xóa"; false/không có giá trị => Đếm tất cả các Post chưa bị "xóa"
    
 ## `POST:/api/posts/create`
+  - **Chức năng:** Tạo Post mới
   - **Trả về:** Post đã được tạo
   - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
   - **Body:**
@@ -109,6 +110,7 @@
     - `content`: String JSON lấy từ component `<ArticleEditor />`
    
 ## `POST:/api/posts/update/<key>`
+  - **Chức năng:** Cập nhật Post có `key`
   - **Trả về:** Post đã được cập nhật
   - **Cần jwtToken:** (Header chứa `Bearer <jwtToken>`)
   - **Body:**
@@ -133,9 +135,33 @@
 
 # API Thể loại (Category):
 
+## `GET:/api/categories/all`
+  - **Trả về:** Danh sách tất cả các thể loại Category
+
+## `POST:/api/categories/create`
+  - **Trả về:** Category vừa tạo
+  - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
+  - **Body:**
+    - `name`: Tên của Category
+
+## `POST:/api/categories/update/<key>`
+  - **Chức năng:** Cập nhật Category có `key`
+  - **Trả về:** Category vừa cập nhật
+  - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
+
+## `POST:/api/categories/delete`
+  - **Chức năng:** Xóa Category có `key`
+  - **Cần jwtToken** (Header chứa `Bearer <jwtToken>`)
+
 # API Người dùng (User):
 
-# CÁC COMPONENTS:
+## `POST:/api/login`
+  - **Trả về:** String jwtToken, cầu lưu lại trong `localStorage` (`localStorage.setItem("jwtToken", jwtToken)`)
+  - **Body:**
+    - `username`: Username
+    - `password`: Mật khẩu
+
+# CÁC COMPONENTS: (Chưa hoàn thiện hoặc sai)
 - `Article`              : Chi tiết post đầy đủ
 - `ArticleCardOverlay`   : Link post, tiêu đề post nằm đè lên ảnh
 - `ArticleCardSide`      : Link post, tiêu đề post nằm bên phải ảnh
